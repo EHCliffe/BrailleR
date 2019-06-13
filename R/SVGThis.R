@@ -169,6 +169,16 @@ x$y = x$data$y
 x$data=NULL
       suppressWarnings(do.call(plot, x))  # ensure we create a plot on a new graphics device
       gridGraphics::grid.echo()  # plot() uses graphics package
+      # use gridSVG ideas in here
+      gridSVG::grid.garnish(
+        "graphics-plot-1-bottom-axis-line-1", title = "the x axis")
+      gridSVG::grid.garnish(
+        "graphics-plot-1-left-axis-line-1", title = "the y axis")
+      # these titles are included in the <g> tag not a <title> tag
+      .addInfo("graphics-plot-1-bottom-axis-line-1", title = "the x axis",
+               desc = "need something much smarter in here")
+      .addInfo("graphics-plot-1-left-axis-line-1", title = "the y axis",
+               desc = "need something much smarter in here")
       gridSVG::grid.export(name = file)
       dev.off()  # remove our graph window
       .MakeTigerReady(svgfile = file)
