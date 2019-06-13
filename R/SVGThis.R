@@ -9,8 +9,8 @@
       name,
       grid::gTree(
           children = grid::gList(
-              elementGrob("title", children = grid::gList(textNodeGrob(title))),
-              elementGrob("desc", children = grid::gList(textNodeGrob(desc))),
+              elementGrob("titleEHC", children = grid::gList(textNodeGrob(title))),
+              elementGrob("descEHC", children = grid::gList(textNodeGrob(desc))),
               grid::grid.get(name)), name = name), redraw = FALSE)
 }
 
@@ -171,13 +171,13 @@ x$data=NULL
       gridGraphics::grid.echo()  # plot() uses graphics package
       # use gridSVG ideas in here
       gridSVG::grid.garnish(
-        "graphics-plot-1-bottom-axis-line-1", title = "the x axis")
+        "graphics-plot-1-bottom-axis-line-1", title = "the x axis, WOO")
       gridSVG::grid.garnish(
-        "graphics-plot-1-left-axis-line-1", title = "the y axis")
+        "graphics-plot-1-left-axis-line-1", title = "the y axis WOO")
       # these titles are included in the <g> tag not a <title> tag
-      .addInfo("graphics-plot-1-bottom-axis-line-1", title = "the x axis",
+      .addInfo("graphics-plot-1-bottom-axis-line-1", title = "the x axis Boo",
                desc = "need something much smarter in here")
-      .addInfo("graphics-plot-1-left-axis-line-1", title = "the y axis",
+      .addInfo("graphics-plot-1-left-axis-line-1", title = "the y axis Boo",
                desc = "need something much smarter in here")
       gridSVG::grid.export(name = file)
       dev.off()  # remove our graph window
