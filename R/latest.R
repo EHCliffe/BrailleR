@@ -14,8 +14,10 @@
       root, position=i, mean=gs$MeanY[i], median=gs$MedianY[i], sd=gs$SDY[i], n=gs$N[i])
   }
   annotations[[i + 1]] = .AddXMLAddAnnotation(
-    root, position=0, id=.AddXMLmakeId("box", "1.1.1"), kind="passive")
-  .AddXMLAddComponents(annotation, annotations)
+    root, position=0, id=.AddXMLmakeId("box", "1.1.1"), kind="active")
+  annotations[[i + 2]] = .AddXMLAddAnnotation(
+    root, position=i+1, id=.AddXMLmakeId("points", "1.1"), kind="active")
+.AddXMLAddComponents(annotation, annotations)
   .AddXMLAddChildren(annotation, annotations)
   .AddXMLAddParents(annotation, annotations)
   return(invisible(annotation))

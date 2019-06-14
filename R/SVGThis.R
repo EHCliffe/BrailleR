@@ -9,8 +9,8 @@
       name,
       grid::gTree(
           children = grid::gList(
-              elementGrob("titleEHC", children = grid::gList(textNodeGrob(title))),
-              elementGrob("descEHC", children = grid::gList(textNodeGrob(desc))),
+              elementGrob("title", children = grid::gList(textNodeGrob(title))),
+              elementGrob("desc", children = grid::gList(textNodeGrob(desc))),
               grid::grid.get(name)), name = name), redraw = FALSE)
 }
 
@@ -171,6 +171,9 @@ x$main = x$ExtraArgs$main
 #If we don't do the below then we don't get the correct axis labels
 x$xlab = x$ExtraArgs$xlab
 x$ylab = x$ExtraArgs$ylab
+#We need solid points for them to be visible
+x$type = "p"
+x$pch = 19
 #If we don't do the below then we get a lot of warnings from plot.window
 x$ExtraArgs=NULL
 x$par = NULL
@@ -182,13 +185,13 @@ x$data=NULL
       gridGraphics::grid.echo()  # plot() uses graphics package
       # use gridSVG ideas in here
       gridSVG::grid.garnish(
-        "graphics-plot-1-bottom-axis-line-1", title = "the x axis, WOO")
+        "graphics-plot-1-bottom-axis-line-1", title = "the x axis, ")
       gridSVG::grid.garnish(
-        "graphics-plot-1-left-axis-line-1", title = "the y axis WOO")
+        "graphics-plot-1-left-axis-line-1", title = "the y axis ")
       # these titles are included in the <g> tag not a <title> tag
-      .addInfo("graphics-plot-1-bottom-axis-line-1", title = "the x axis Boo",
+      .addInfo("graphics-plot-1-bottom-axis-line-1", title = "the x axis ",
                desc = "need something much smarter in here")
-      .addInfo("graphics-plot-1-left-axis-line-1", title = "the y axis Boo",
+      .addInfo("graphics-plot-1-left-axis-line-1", title = "the y axis ",
                desc = "need something much smarter in here")
       gridSVG::grid.export(name = file)
       dev.off()  # remove our graph window
