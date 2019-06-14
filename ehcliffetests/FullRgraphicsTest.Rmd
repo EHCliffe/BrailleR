@@ -1,0 +1,170 @@
+---
+title: "Various graphs"
+author: "Emma Cliffe"
+date: "10/06/2019"
+header-includes: 
+  \usepackage{hyperref}
+urlcolor:
+  blue
+output:
+  html_document:
+    dev: svg
+    keep_md: yes
+    toc: yes
+  pdf_document:
+    dev: pdf
+    keep_tex: yes
+    fig_caption: yes
+    toc: yes
+---
+
+```{r global_options, include=FALSE}
+knitr::opts_chunk$set(fig.width=6, fig.height=4, fig.path='Figs/', echo=FALSE, warning=FALSE, message=FALSE)
+```
+
+\newcommand{\eatme}[1]{}
+
+```{r libraries,echo=FALSE}
+library(learningr)
+library(lattice)
+library(ggplot2)
+library(BrailleR)
+```
+
+# What is this?
+
+We are testing how far we can get with BrailleR in terms of alternative formats for graphics. Once we have done that we need to work out how to get them to compile to PDF and Word properly as well. There seems to be a problem with using out.extra in the way we are. 
+
+Plan:
+
+* Work through all grid based examples from the R book
+
+## Scatterplots
+
+```{r scatterplot}
+#Lattice is not accessible
+#scatterplot1=xyplot(Turnout ~ Income, obama_vs_mccain)
+#VI(scatterplot1)
+#MakeAccessibleSVG(scatterplot1,file="scatterplot1")
+#BrowseSVG(file="scatterplot1",view=interactive())
+scatterplot2=ggplot(obama_vs_mccain,aes(Income,Turnout))+geom_point(color="black")
+ggsave("./Figs/scatterplot2.svg.pdf", width = 4, height = 4)
+MakeAccessibleSVG(scatterplot2,file="scatterplot2")
+BrowseSVG(file="scatterplot2")
+#The below makes the SVG and claims to have made the XML but the content of the XML is not useful
+#MakeAccessibleSVG(scatterplot2)
+{sink(file="scatterplot.txt")
+  print(VI(scatterplot2))
+#This is part of the BrailleR package and is to be used not with VI but with WTF and WhereXY. However, WTF doesn't work in RStudio and doesn't work interactively, I imagine.
+scatterplot3=with(obama_vs_mccain,ScatterPlot(Income,Turnout))
+MakeAccessibleSVG(scatterplot3,file="scatterplot3")
+BrowseSVG(file="scatterplot3")
+#WhereXY does not actually depend on ScatterPlot being called I don't think.
+  print(with(obama_vs_mccain,WhereXY(Income,Turnout)))
+  sink()}
+```
+<!--I don't think that you can put the HTML in Figs as it doesn't seem to find the JS file-->
+```{r plotscatters, out.extra=paste("alt='This image has a long description' longdesc='./scatterplot2.html'"),fig.cap="[Boxplot of stuff (can also be used in interactive mode)](./scatterplot2.html)",echo=FALSE,dev='svg'}
+scatterplot2
+```
+<!--This should be being created by THE SAME FUNCTION as the hist one which works - see MakeAccessibleSVGMethod.R in github. This enabled me to work out that the annotations are fine, it is the SVG files that are the problem. -->
+```{r plotscattersbrl, out.extra=paste("alt='This image has a long description' longdesc='./scatterplot3.html'"),fig.cap="[Boxplot of stuff (can also be used in interactive mode)](./scatterplot3.html)",echo=FALSE,dev='svg'}
+scatterplot3
+```
+
+<!-- The below doesn't work very well as out.extra inserts into both html and LaTeX and there isn't a way to make this comprehensible to both -->
+```{r drawscatterplot, eval=FALSE, fig.cap="[Scatterplot of stuff (a description of which can also be read)](./scatterplot.txt)", fig.height=4, fig.width=4, include=FALSE, out.extra=paste("alt='This image has a long description' longdesc='./scatterplot.txt'")}
+scatterplot2
+```
+
+
+<!-- The below, on the other hand, with the slightly off the wall filenaming trick works well. Just need to find a way to put a caption in -->
+<!--[![Follow link for description of image](./Figs/scatterplot2.svg)](./scatterplot.txt)-->
+
+
+<!-- So, this works for putting a caption in... but it will not work in the above AHA, the Pandoc documentation is where I should have STARTED: https://pandoc.org/MANUAL.html#images You can add arbitary link attributes. Sigh. --->
+![[Follow link for description of image](./scatterplot.txt)\label{scatterplot}](./Figs/scatterplot2.svg){longdesc=./scatterplot.txt}
+
+<!-- THis is useful http://www.rci.rutgers.edu/~ag978/litdata/figs/ -->
+
+## Line plots
+```{r lineplots}
+#Lattice is not accessible
+#lineplot1=xyplot(-Min.Depth + -Max.Depth ~ Date, crab_tag$daylog, type="l")
+#VI(lineplot1)
+#MakeAccessibleSVG(lineplot1,file="lineplot1")
+lineplot2=ggplot(crab_tag$daylog, aes(Date,-Min.Depth)) + geom_line()
+#The below makes the SVG and claims to have made the XML but the content of the XML is not useful
+ggsave("./Figs/lineplot2.svg.pdf", width = 4, height = 4)
+MakeAccessibleSVG(lineplot2,file="./Figs/lineplot2")
+{sink(file="lineplot.txt")
+  print(VI(lineplot2))
+#This is part of the BrailleR package and is to be used not with VI but with WTF and WhereXY. However, WTF doesn't work in RStudio and doesn't work interactively, I imagine.
+#WhereXY does not actually depend on ScatterPlot being called I don't think. Though, ScatterPlot can make line plots
+  print(with(crab_tag$daylog,WhereXY(Date,-Max.Depth,c(12,10))))
+  sink()}
+```
+<!--I can't find anything more useful for linegraphs than this at this moment-->
+![[Follow link for description of image](./lineplot.txt)\label{lineplot}](./Figs/lineplot2.svg){longdesc=./lineplot.txt}
+
+## Histograms next
+We already know that this is the cool one where most of the early work was done. Best to try and do it both ways to show where it started and then where it went but I will come back to this because I already explored it. 
+```{r data,echo=FALSE}
+mydata = rnorm(1000)
+```
+Now I create the SVG pair
+```{r makeplots,include=FALSE}
+MakeAccessibleSVG(hist(mydata),file="myhist2")
+BrowseSVG(file="myhist2",view=interactive())
+```
+And display this with the longdesc set to the html which allows interaction
+```{r plot, out.extra=paste("alt='This image has a long description' longdesc='./myhist2.html'"),fig.cap="[Histogram of stuff (can also be used in interactive mode)](./myhist2.html)",echo=FALSE,dev='svg'}
+hist(mydata)
+```
+Where we don't have that yet we could instead ask for a description
+```{r makedescription, include=FALSE}
+{sink(file="myhist3.txt")
+VI(hist(mydata))
+sink()}
+```
+Now we do it again
+```{r plot2, out.extra=paste("alt='This image has a long description' longdesc='./myhist3.txt'"),fig.cap="[Histogram of stuff (a description of which can also be read)](./myhist3.txt)",echo=FALSE,dev='svg'}
+hist(mydata)
+```
+
+## Boxplots
+```{r boxplot}
+#Lattice is not accessible
+#boxplot1=bwplot(obama_vs_mccain$Obama ~ obama_vs_mccain$Region)
+#VI(boxplot1)
+#MakeAccessibleSVG(boxplot1,file="boxplot1")
+boxplot2=ggplot(obama_vs_mccain, aes(Region, Obama))+geom_boxplot()
+#The below makes the SVG and claims to have made the XML but the content of the XML is not useful
+ggsave("./Figs/boxplot2.svg.pdf", width = 4, height = 4)
+MakeAccessibleSVG(boxplot2,file="./Figs/boxplot2")
+{sink(file="boxplot.txt")
+  print(VI(boxplot2))
+  sink()}
+#The below uses a function built into BrailleR. It produces more useful output when VI is called on it. This also doesn't work with the make accessible SVG, in the sense that the XML isn't useful
+boxplot3=boxplot(obama_vs_mccain$Obama ~ obama_vs_mccain$Region)
+#MakeAccessibleSVG(boxplot3,file="./Figs/boxplot3")
+{sink(file="boxplot2.txt")
+  print(VI(boxplot3))
+  sink()}
+#Disturbingly I have found that the descriptions do not agree with each other!! One or other of them has a bug that is affecting the positioning of the box ends and anything calculated from them. This data is too complex to track it down in so I need to make a M(N)WE
+#Actually, there are different ways to define the '5 values' so is that an example of this?? Look up what choice each of them is making then try to replicate. Simple replication didn't work. Yes, the two data points in the group is instructive here.
+```
+
+![[Follow link for description of image](./boxplot2.txt)\label{boxplot}](./Figs/boxplot2.svg){longdesc=./boxplot2.txt}
+
+Now I create the SVG pair
+```{r makeboxes,include=FALSE}
+mydataframe=data.frame(mydata)
+mydatabox=ggplot(mydataframe,aes('Thing',mydata))+geom_boxplot() + theme_bw()
+MakeAccessibleSVG(mydatabox,file="mydatabox")
+BrowseSVG(file="mydatabox",view=interactive())
+```
+And display this with the longdesc set to the html which allows interaction
+```{r plotboxes, out.extra=paste("alt='This image has a long description' longdesc='./mydatabox.html'"),fig.cap="[Boxplot of stuff (can also be used in interactive mode)](./mydatabox.html)",echo=FALSE,dev='svg'}
+mydatabox
+```

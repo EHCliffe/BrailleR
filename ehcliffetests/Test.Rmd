@@ -1,0 +1,69 @@
+---
+title: "Test"
+author: "Emma Cliffe"
+date: "22/05/2019"
+output:
+  html_document: default
+  pdf_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,eval.after = "out.extra")
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+Here is some random maths: $x^2$ and some more:
+\begin{align*}
+x &= 1\\
+y &= 2\\
+z &= 3
+\end{align*}
+
+\begin{center}
+%This will not be rendered in the html though!
+You can put quite a lot of raw \LaTeX in here and have it delivered safely to the \LaTeX output and the PDF output.
+\end{center}
+<center>
+You can do the same with raw html but this will be rendered, badly, in the PDF
+</center>
+
+| Tables        | Are           | Cool  |
+| ------------- |:-------------:| -----:|
+| col 3 is      | right-aligned | $\$1600$ |
+| col 2 is      | centered      |   $\$12$ |
+| zebra stripes | are neat      |    $\$1$ |
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+```{r mtcars$mpg-setup}
+library(BrailleR)
+library(ggplot2)
+stuff=VI(hist(mtcars$mpg))
+```
+
+
+```{r mtcars$mpg, out.extra=paste("alt='",stuff,"'")}
+hist(mtcars$mpg)
+```
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+```{r}
+{sink(file="vanilla.txt")
+2+3
+somedata=rnorm(10)
+VI(hist(somedata))
+sink()}
+```

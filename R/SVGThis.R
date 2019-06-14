@@ -166,9 +166,17 @@ SVGThis.histogram =
 SVGThis.scatterplot = function(x, file = "test.svg", ...) {
 x$x= x$data$x
 x$y = x$data$y
-#If we don't do this then we don't get the correct axis labels
+#If we don't do the below then we lose the title
+x$main = x$ExtraArgs$main
+#If we don't do the below then we don't get the correct axis labels
 x$xlab = x$ExtraArgs$xlab
 x$ylab = x$ExtraArgs$ylab
+#If we don't do the below then we get a lot of warnings from plot.window
+x$ExtraArgs=NULL
+x$par = NULL
+x$GroupSummaries = NULL
+x$xTicks = NULL
+x$yTicks = NULL
 x$data=NULL
       suppressWarnings(do.call(plot, x))  # ensure we create a plot on a new graphics device
       gridGraphics::grid.echo()  # plot() uses graphics package

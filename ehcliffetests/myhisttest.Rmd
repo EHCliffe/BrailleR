@@ -1,0 +1,47 @@
+---
+title: "Hist Test"
+author: "Emma Cliffe"
+date: "29/05/2019"
+output:
+  html_document:
+    fig_caption: yes
+    keep_md: yes
+    toc: yes
+  word_document:
+    toc: yes
+  pdf_document:
+    toc: yes
+---
+
+```{r global_options, include=FALSE}
+knitr::opts_chunk$set(fig.width=12, fig.height=8, fig.path='Figs/', echo=FALSE, warning=FALSE, message=FALSE)
+```
+
+## Testing basic histogram setup
+This is a test of the basic histogram setup. First we load the libraries. 
+```{r libraries,echo=FALSE}
+library(BrailleR)
+```
+Now we need some data to work with
+```{r data,echo=FALSE}
+mydata = rnorm(1000)
+```
+Now I create the SVG pair
+```{r makeplots,include=FALSE}
+MakeAccessibleSVG(hist(mydata),file="myhist2")
+BrowseSVG(file="myhist2",view=interactive())
+```
+And display this with the longdesc set to the html which allows interaction
+```{r plot, out.extra=paste("alt='This image has a long description' longdesc='./myhist2.html'"),fig.cap="[Histogram of stuff (can also be used in interactive mode)](./myhist2.html)",echo=FALSE,dev='svg'}
+hist(mydata)
+```
+Where we don't have that yet we could instead ask for a description
+```{r makedescription, include=FALSE}
+{sink(file="myhist3.txt")
+VI(hist(mydata))
+sink()}
+```
+Now we do it again
+```{r plot2, out.extra=paste("alt='This image has a long description' longdesc='./myhist3.txt'"),fig.cap="[Histogram of stuff (a description of which can also be read)](./myhist3.txt)",echo=FALSE,dev='svg'}
+hist(mydata)
+```
